@@ -3,16 +3,9 @@ const db = require('../../config/database')
 
 module.exports = (app) => {
 
-	app.get(`/`, function(req, resp){
-		resp.send(
-			`<html>
-			<head>
-				<meta charset="utf-8">
-			</head>
-			<body>
-				<h1> Casa do Código </h1>
-			</body>
-		</html>`
+	app.get('/', function(req, resp) {
+		resp.marko(
+			require('../views/base/home/home.marko')
 		);
 	});
 
@@ -53,18 +46,18 @@ module.exports = (app) => {
 			.catch(erro => console.log(erro));
 	});
 
-	app.get('/livro/form/:id', function(req, resp) {
-    const id = req.params.id;
+	app.get('/livros/form/:id', function(req, resp) {
+		const id = req.params.id;
 		const livroDao = new LivroDao(db);
-		
-    livroDao.buscaPorId(id)
-			.then(livro =>
-				resp.marko(
-					require('../views/livros/form/form.marko'),
-					{ livro: livro }
-				)
-			)
-			.catch(erro => console.log(erro));
+
+		livroDao.buscaPorId(id)
+						.then(livro => 
+								resp.marko(
+										require('../views/livros/form/form.marko'), 
+										{ livro: livro }
+								)
+						)
+						.catch(erro => console.log(erro));
 	});
 
 };
